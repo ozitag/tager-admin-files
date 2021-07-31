@@ -10,7 +10,7 @@ export function fetFilesList(params?: {
   return request.get({ path: '/admin/userfiles', params });
 }
 
-export function getCount(): Promise<ResponseBody<{ count: number }>> {
+export function getFilesCount(): Promise<ResponseBody<{ count: number }>> {
   return request.get({ path: '/admin/userfiles/count' });
 }
 
