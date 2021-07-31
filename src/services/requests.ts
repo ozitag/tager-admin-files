@@ -2,7 +2,7 @@ import { request, ResponseBody } from '@tager/admin-services';
 
 import { FileModel } from '../typings/model';
 
-export function fetFilesList(params?: {
+export function getFilesList(params?: {
   query?: string;
   pageNumber?: number;
   pageSize?: number;

@@ -46,7 +46,7 @@ import {
 } from '@tager/admin-ui';
 import { useResourceDelete } from '@tager/admin-services';
 
-import { deleteFile, fetFilesList } from '../../services/requests';
+import { deleteFile, getFilesList } from '../../services/requests';
 import { FileModel } from '../../typings/model';
 import { getFilesFormUrl } from '../../utils/paths';
 
@@ -67,7 +67,7 @@ export default defineComponent({
       pageNumber,
     } = useDataTable<FileModel>({
       fetchEntityList: (params) =>
-        fetFilesList({
+        getFilesList({
           query: params.searchQuery,
           pageNumber: params.pageNumber,
           pageSize: params.pageSize,
