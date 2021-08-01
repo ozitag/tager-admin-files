@@ -22,6 +22,20 @@
       }"
       @change="handleChange"
     >
+      <template v-slot:cell(url)="{ row }">
+        <div class="url-cell">
+          <span>{{ cutUrlOrigin(row.url) }}</span>
+          <base-button
+            variant="icon"
+            class="copy-button"
+            @click="handleCopy(row.url)"
+          >
+            <svg-icon v-if="!isCopied" name="contentCopy" class="icon-size" />
+            <svg-icon v-else name="done" class="icon-size icon-color-green" />
+          </base-button>
+        </div>
+      </template>
+
       <template v-slot:cell(delete)="{ row }">
         <base-button
           variant="icon"
@@ -38,13 +52,16 @@
 
 <script lang="ts">
 import { defineComponent, onMounted } from '@vue/composition-api';
+import filesize from 'filesize';
 
 import {
   ColumnDefinition,
+  useCopyToClipboard,
   useDataTable,
   useTranslation,
 } from '@tager/admin-ui';
 import { useResourceDelete } from '@tager/admin-services';
+import { cutUrlOrigin } from '@tager/admin-ui/src/utils/common';
 
 import { deleteFile, getFilesList } from '../../services/requests';
 import { FileModel } from '../../typings/model';
@@ -92,7 +109,7 @@ export default defineComponent({
     const columnDefs: Array<ColumnDefinition<FileModel>> = [
       {
         id: 1,
-        name: 'ID',
+        name: '#',
         field: 'id',
         style: { width: '50px', textAlign: 'center' },
         headStyle: { width: '50px', textAlign: 'center' },
@@ -111,6 +128,7 @@ export default defineComponent({
         id: 4,
         name: t('files:fileSize'),
         field: 'size',
+        format: ({ row }) => filesize(row.size),
       },
       {
         id: 5,
@@ -126,6 +144,8 @@ export default defineComponent({
       },
     ];
 
+    const [isCopied, handleCopy] = useCopyToClipboard(500);
+
     return {
       columnDefs,
       getFilesFormUrl,
@@ -139,7 +159,30 @@ export default defineComponent({
       pageNumber,
       handleResourceDelete,
       isDeleting,
+      isCopied,
+      handleCopy,
+      cutUrlOrigin,
     };
   },
 });
 </script>
+
+<style lang="scss" scoped>
+.url-cell {
+  display: flex;
+  align-items: center;
+
+  .copy-button {
+    margin-left: 5px;
+
+    .icon-size {
+      width: 14px;
+      height: 14px;
+    }
+
+    .icon-color-green {
+      color: #22863a;
+    }
+  }
+}
+</style>

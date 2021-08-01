@@ -1,6 +1,6 @@
 {
   "name": "@tager/admin-files",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "license": "MIT",
   "main": "dist/index.umd.js",
   "module": "dist/index.esm.js",
@@ -19,6 +19,7 @@
     "yalc:clean": "yalc remove --all"
   },
   "dependencies": {
+    "filesize": "^7.0.0",
     "lodash.kebabcase": "^4.1.1",
     "path-to-regexp": "^6.1.0"
   },
@@ -27,7 +28,7 @@
     "@rollup/plugin-node-resolve": "^8.1.0",
     "@tager/admin-layout": "^0.5.1",
     "@tager/admin-services": "^0.2.23",
-    "@tager/admin-ui": "^0.8.58",
+    "@tager/admin-ui": "^0.8.78",
     "@types/lodash.kebabcase": "^4.1.6",
     "@types/node": "12.x",
     "@typescript-eslint/eslint-plugin": "^2.26.0",
