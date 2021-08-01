@@ -20,6 +20,6 @@ export function deleteFile(
   return request.delete({ path: `/admin/userfiles/${fileId}` });
 }
 
-export function addFile(params: { file: string }) {
-  return request.post({ path: '/admin/userfiles', params });
+export function addFile(payload: { file: string }) {
+  return request.post({ path: '/admin/userfiles', body: payload });
 }
