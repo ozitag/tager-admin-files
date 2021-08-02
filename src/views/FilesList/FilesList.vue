@@ -23,17 +23,7 @@
       @change="handleChange"
     >
       <template v-slot:cell(url)="{ row }">
-        <div class="url-cell">
-          <span>{{ cutUrlOrigin(row.url) }}</span>
-          <base-button
-            variant="icon"
-            class="copy-button"
-            @click="handleCopy(row.url)"
-          >
-            <svg-icon v-if="!isCopied" name="contentCopy" class="icon-size" />
-            <svg-icon v-else name="done" class="icon-size icon-color-green" />
-          </base-button>
-        </div>
+        <UrlCell :url="row.url" />
       </template>
 
       <template v-slot:cell(delete)="{ row }">
@@ -56,19 +46,22 @@ import filesize from 'filesize';
 
 import {
   ColumnDefinition,
-  useCopyToClipboard,
   useDataTable,
   useTranslation,
 } from '@tager/admin-ui';
 import { useResourceDelete } from '@tager/admin-services';
-import { cutUrlOrigin } from '@tager/admin-ui/src/utils/common';
 
 import { deleteFile, getFilesList } from '../../services/requests';
 import { FileModel } from '../../typings/model';
 import { getFilesFormUrl } from '../../utils/paths';
 
+import UrlCell from './components/UrlCell';
+
 export default defineComponent({
   name: 'FilesList',
+  components: {
+    UrlCell,
+  },
   setup(props, context) {
     const { t } = useTranslation(context);
 
@@ -144,8 +137,6 @@ export default defineComponent({
       },
     ];
 
-    const [isCopied, handleCopy] = useCopyToClipboard(500);
-
     return {
       columnDefs,
       getFilesFormUrl,
@@ -159,30 +150,7 @@ export default defineComponent({
       pageNumber,
       handleResourceDelete,
       isDeleting,
-      isCopied,
-      handleCopy,
-      cutUrlOrigin,
     };
   },
 });
 </script>
-
-<style lang="scss" scoped>
-.url-cell {
-  display: flex;
-  align-items: center;
-
-  .copy-button {
-    margin-left: 5px;
-
-    .icon-size {
-      width: 14px;
-      height: 14px;
-    }
-
-    .icon-color-green {
-      color: #22863a;
-    }
-  }
-}
-</style>
