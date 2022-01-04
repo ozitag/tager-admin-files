@@ -1,7 +1,7 @@
 <template>
   <page
-    :title="$t('files:filesList')"
-    :header-buttons="[
+      :title="$t('files:filesList')"
+      :header-buttons="[
       {
         text: $t('files:createFile'),
         href: getFilesFormUrl({ fileId: 'create' }),
@@ -9,31 +9,31 @@
     ]"
   >
     <data-table
-      :column-defs="columnDefs"
-      :row-data="rowData"
-      :loading="isRowDataLoading"
-      :error-message="errorMessage"
-      :search-query="searchQuery"
-      :pagination="{
+        :column-defs="columnDefs"
+        :row-data="rowData"
+        :loading="isRowDataLoading"
+        :error-message="errorMessage"
+        :search-query="searchQuery"
+        :pagination="{
         pageSize,
         pageCount,
         pageNumber,
         disabled: isRowDataLoading,
       }"
-      @change="handleChange"
+        @change="handleChange"
     >
       <template v-slot:cell(url)="{ row }">
-        <UrlCell :url="row.url" />
+        <UrlCell :url="row.url"/>
       </template>
 
       <template v-slot:cell(delete)="{ row }">
         <base-button
-          variant="icon"
-          :title="$t('files:delete')"
-          :disabled="isDeleting(row.id)"
-          @click="handleResourceDelete(row.id)"
+            variant="icon"
+            :title="$t('files:delete')"
+            :disabled="isDeleting(row.id)"
+            @click="handleResourceDelete(row.id)"
         >
-          <svg-icon name="delete" />
+          <svg-icon name="delete"/>
         </base-button>
       </template>
     </data-table>
@@ -41,7 +41,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from '@vue/composition-api';
+import {defineComponent, onMounted} from '@vue/composition-api';
 import filesize from 'filesize';
 
 import {
@@ -49,11 +49,11 @@ import {
   useDataTable,
   useTranslation,
 } from '@tager/admin-ui';
-import { useResourceDelete } from '@tager/admin-services';
+import {useResourceDelete} from '@tager/admin-services';
 
-import { deleteFile, getFilesList } from '../../services/requests';
-import { FileModel } from '../../typings/model';
-import { getFilesFormUrl } from '../../utils/paths';
+import {deleteFile, getFilesList} from '../../services/requests';
+import {FileModel} from '../../typings/model';
+import {getFilesFormUrl} from '../../utils/paths';
 
 import UrlCell from './components/UrlCell';
 
@@ -63,7 +63,7 @@ export default defineComponent({
     UrlCell,
   },
   setup(props, context) {
-    const { t } = useTranslation(context);
+    const {t} = useTranslation(context);
 
     const {
       fetchEntityList: fetchFilesList,
@@ -77,11 +77,11 @@ export default defineComponent({
       pageNumber,
     } = useDataTable<FileModel>({
       fetchEntityList: (params) =>
-        getFilesList({
-          query: params.searchQuery,
-          pageNumber: params.pageNumber,
-          pageSize: params.pageSize,
-        }),
+          getFilesList({
+            query: params.searchQuery,
+            pageNumber: params.pageNumber,
+            pageSize: params.pageSize,
+          }),
       initialValue: [],
       context,
       resourceName: 'Files list',
@@ -92,7 +92,7 @@ export default defineComponent({
       fetchFilesList();
     });
 
-    const { handleResourceDelete, isDeleting } = useResourceDelete({
+    const {handleResourceDelete, isDeleting} = useResourceDelete({
       deleteResource: deleteFile,
       resourceName: 'File',
       onSuccess: fetchFilesList,
@@ -102,10 +102,10 @@ export default defineComponent({
     const columnDefs: Array<ColumnDefinition<FileModel>> = [
       {
         id: 1,
-        name: '#',
+        name: 'ID',
         field: 'id',
-        style: { width: '50px', textAlign: 'center' },
-        headStyle: { width: '50px', textAlign: 'center' },
+        style: {width: '50px', textAlign: 'center'},
+        headStyle: {width: '50px', textAlign: 'center'},
       },
       {
         id: 2,
@@ -121,19 +121,21 @@ export default defineComponent({
         id: 4,
         name: t('files:fileSize'),
         field: 'size',
-        format: ({ row }) => filesize(row.size),
+        format: ({row}) => filesize(row.size),
+        style: {whiteSpace: 'nowrap'},
+        headStyle: {whiteSpace: 'nowrap'},
       },
       {
         id: 5,
         name: 'URL',
-        field: 'url',
+        field: 'url'
       },
       {
         id: 6,
         name: t('files:delete'),
         field: 'delete',
-        style: { textAlign: 'center' },
-        headStyle: { textAlign: 'center' },
+        style: {textAlign: 'center'},
+        headStyle: {textAlign: 'center'},
       },
     ];
 
