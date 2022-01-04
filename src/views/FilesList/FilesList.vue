@@ -22,10 +22,6 @@
       }"
         @change="handleChange"
     >
-      <template v-slot:cell(url)="{ row }">
-        <UrlCell :url="row.url"/>
-      </template>
-
       <template v-slot:cell(delete)="{ row }">
         <base-button
             variant="icon"
@@ -45,7 +41,7 @@ import {defineComponent, onMounted} from '@vue/composition-api';
 import filesize from 'filesize';
 
 import {
-  ColumnDefinition,
+  ColumnDefinition, cutUrlOrigin,
   useDataTable,
   useTranslation,
 } from '@tager/admin-ui';
@@ -55,13 +51,9 @@ import {deleteFile, getFilesList} from '../../services/requests';
 import {FileModel} from '../../typings/model';
 import {getFilesFormUrl} from '../../utils/paths';
 
-import UrlCell from './components/UrlCell';
-
 export default defineComponent({
   name: 'FilesList',
-  components: {
-    UrlCell,
-  },
+  components: {},
   setup(props, context) {
     const {t} = useTranslation(context);
 
@@ -128,7 +120,12 @@ export default defineComponent({
       {
         id: 5,
         name: 'URL',
-        field: 'url'
+        type: 'link',
+        field: 'url',
+        format: ({row}) => ({
+          url: row.url,
+          text: cutUrlOrigin(row.url)
+        }),
       },
       {
         id: 6,
