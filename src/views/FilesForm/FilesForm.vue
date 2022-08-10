@@ -1,38 +1,44 @@
 <template>
-  <page :title="$t('files:fileCreation')">
+  <Page :title="$i18n.t('files:fileCreation')">
     <form novalidate @submit.prevent>
-      <template>
-        <form-field-file-input
-          v-model="values.file"
-          :error="errors.file"
-          :label="$t('files:file')"
-          name="file"
-        />
-      </template>
+      <FormFieldFileInput
+        v-model:value="values.file"
+        :error="errors.file"
+        :label="$i18n.t('files:file')"
+        name="file"
+      />
     </form>
 
-    <template v-slot:footer>
+    <template #footer>
       <FormFooter
         :back-href="getFilesListUrl()"
-        :on-submit="submitForm"
         :is-submitting="isSubmitting"
         :is-creation="true"
         submit-label="Добавить"
+        @submit="submitForm"
       />
     </template>
-  </page>
+  </Page>
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
-import { ref } from '@vue/composition-api';
+import { defineComponent, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-import { convertRequestErrorToMap } from '@tager/admin-services';
 import {
   TagerFormSubmitEvent,
   FormFooter,
-  useTranslation,
+  FormField,
+  FormFieldFileInput,
 } from '@tager/admin-ui';
+import {
+  convertRequestErrorToMap,
+  navigateBack,
+  useI18n,
+  useResource,
+  useToast,
+} from '@tager/admin-services';
+import { Page } from '@tager/admin-layout';
 
 import { addFile } from '../../services/requests';
 import { getFilesListUrl } from '../../utils/paths';
@@ -42,9 +48,11 @@ import { convertFilesFormValuesToCreationPayload } from './FilesForm.helpers';
 
 export default defineComponent({
   name: 'FilesForm',
-  components: { FormFooter },
-  setup(props, context) {
-    const { t } = useTranslation(context);
+  components: { Page, FormFieldFileInput, FormFooter },
+  setup() {
+    const { t } = useI18n();
+    const toast = useToast();
+    const router = useRouter();
 
     /** Form state */
 
@@ -69,10 +77,10 @@ export default defineComponent({
             event.type === 'create_exit' ||
             event.type === 'save_exit'
           ) {
-            context.root.$router.push(getFilesListUrl());
+            navigateBack(router, getFilesListUrl());
           }
 
-          context.root.$toast({
+          toast.show({
             variant: 'success',
             title: t('files:success'),
             body: t('files:createdSuccessMessage'),
@@ -81,7 +89,7 @@ export default defineComponent({
         .catch((error) => {
           console.error(error);
           errors.value = convertRequestErrorToMap(error);
-          context.root.$toast({
+          toast.show({
             variant: 'danger',
             title: t('files:error'),
             body: t('files:createdErrorMessage'),

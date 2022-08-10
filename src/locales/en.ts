@@ -1,4 +1,4 @@
-const EN = {
+export const EN = {
   home: 'Home',
   success: 'Success',
   error: 'Error',
@@ -17,5 +17,3 @@ const EN = {
   delete: 'Delete',
   add: 'Add',
 };
-
-export default EN;

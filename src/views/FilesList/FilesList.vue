@@ -1,61 +1,65 @@
 <template>
-  <page
-      :title="$t('files:filesList')"
-      :header-buttons="[
+  <Page
+    :title="$i18n.t('files:filesList')"
+    :header-buttons="[
       {
-        text: $t('files:createFile'),
+        text: $i18n.t('files:createFile'),
         href: getFilesFormUrl({ fileId: 'create' }),
       },
     ]"
   >
-    <data-table
-        :column-defs="columnDefs"
-        :row-data="rowData"
-        :loading="isRowDataLoading"
-        :error-message="errorMessage"
-        :search-query="searchQuery"
-        :pagination="{
+    <DataTable
+      :column-defs="columnDefs"
+      :row-data="rowData"
+      :loading="isRowDataLoading"
+      :error-message="errorMessage"
+      :search-query="searchQuery"
+      :pagination="{
         pageSize,
         pageCount,
         pageNumber,
         disabled: isRowDataLoading,
       }"
-        @change="handleChange"
+      @change="handleChange"
     >
-      <template v-slot:cell(delete)="{ row }">
-        <base-button
-            variant="icon"
-            :title="$t('files:delete')"
-            :disabled="isDeleting(row.id)"
-            @click="handleResourceDelete(row.id)"
+      <template #cell(delete)="{ row }">
+        <BaseButton
+          variant="icon"
+          :title="$i18n.t('files:delete')"
+          :disabled="isDeleting(row.id)"
+          @click="handleResourceDelete(row.id)"
         >
-          <svg-icon name="delete"/>
-        </base-button>
+          <DeleteIcon />
+        </BaseButton>
       </template>
-    </data-table>
-  </page>
+    </DataTable>
+  </Page>
 </template>
 
 <script lang="ts">
-import {defineComponent, onMounted} from '@vue/composition-api';
+import { defineComponent, onMounted } from 'vue';
 import filesize from 'filesize';
 
 import {
-  ColumnDefinition, cutUrlOrigin,
+  ColumnDefinition,
   useDataTable,
-  useTranslation,
+  DataTable,
+  BaseButton,
+  DeleteIcon,
+  cutUrlOrigin,
 } from '@tager/admin-ui';
-import {useResourceDelete} from '@tager/admin-services';
+import { useI18n, useResourceDelete } from '@tager/admin-services';
+import { Page } from '@tager/admin-layout';
 
-import {deleteFile, getFilesList} from '../../services/requests';
-import {FileModel} from '../../typings/model';
-import {getFilesFormUrl} from '../../utils/paths';
+import { deleteFile, getFilesList } from '../../services/requests';
+import { FileModel } from '../../typings/model';
+import { getFilesFormUrl } from '../../utils/paths';
 
 export default defineComponent({
   name: 'FilesList',
-  components: {},
-  setup(props, context) {
-    const {t} = useTranslation(context);
+  components: { DataTable, BaseButton, DeleteIcon, Page },
+  setup() {
+    const { t } = useI18n();
 
     const {
       fetchEntityList: fetchFilesList,
@@ -69,13 +73,12 @@ export default defineComponent({
       pageNumber,
     } = useDataTable<FileModel>({
       fetchEntityList: (params) =>
-          getFilesList({
-            query: params.searchQuery,
-            pageNumber: params.pageNumber,
-            pageSize: params.pageSize,
-          }),
+        getFilesList({
+          query: params.searchQuery,
+          pageNumber: params.pageNumber,
+          pageSize: params.pageSize,
+        }),
       initialValue: [],
-      context,
       resourceName: 'Files list',
       pageSize: 100,
     });
@@ -84,11 +87,10 @@ export default defineComponent({
       fetchFilesList();
     });
 
-    const {handleResourceDelete, isDeleting} = useResourceDelete({
+    const { handleResourceDelete, isDeleting } = useResourceDelete({
       deleteResource: deleteFile,
       resourceName: 'File',
       onSuccess: fetchFilesList,
-      context,
     });
 
     const columnDefs: Array<ColumnDefinition<FileModel>> = [
@@ -96,8 +98,8 @@ export default defineComponent({
         id: 1,
         name: 'ID',
         field: 'id',
-        style: {width: '50px', textAlign: 'center'},
-        headStyle: {width: '50px', textAlign: 'center'},
+        style: { width: '50px', textAlign: 'center' },
+        headStyle: { width: '50px', textAlign: 'center' },
       },
       {
         id: 2,
@@ -113,26 +115,26 @@ export default defineComponent({
         id: 4,
         name: t('files:fileSize'),
         field: 'size',
-        format: ({row}) => filesize(row.size),
-        style: {whiteSpace: 'nowrap'},
-        headStyle: {whiteSpace: 'nowrap'},
+        format: ({ row }) => filesize(row.size),
+        style: { whiteSpace: 'nowrap' },
+        headStyle: { whiteSpace: 'nowrap' },
       },
       {
         id: 5,
         name: 'URL',
         type: 'link',
         field: 'url',
-        format: ({row}) => ({
+        format: ({ row }) => ({
           url: row.url,
-          text: cutUrlOrigin(row.url)
+          text: cutUrlOrigin(row.url),
         }),
       },
       {
         id: 6,
         name: t('files:delete'),
         field: 'delete',
-        style: {textAlign: 'center'},
-        headStyle: {textAlign: 'center'},
+        style: { textAlign: 'center' },
+        headStyle: { textAlign: 'center' },
       },
     ];
 

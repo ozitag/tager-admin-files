@@ -1,10 +1,6 @@
-import { i18n } from '@tager/admin-services';
+import { applyTranslations } from './locales/apply';
 
-import EN from './locales/en';
-import RU from './locales/ru';
-
-i18n.addTranslations('en', 'files', EN);
-i18n.addTranslations('ru', 'files', RU);
+applyTranslations();
 
 export * from './constants/routes';
 export * from './utils/paths';

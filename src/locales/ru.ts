@@ -1,6 +1,6 @@
-import EN from './en';
+import {EN} from './en';
 
-const RU: typeof EN = {
+export const RU: typeof EN = {
   home: 'Главная',
   success: 'Успех',
   error: 'Ошибка',
@@ -19,5 +19,3 @@ const RU: typeof EN = {
   delete: 'Удалить',
   add: 'Добавить',
 };
-
-export default RU;
