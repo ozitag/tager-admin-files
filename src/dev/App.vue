@@ -6,10 +6,12 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
+
 import {type MenuItemType, PageLayout} from "@tager/admin-layout";
 import {ViewListIcon} from "@tager/admin-ui";
-import {getFilesListUrl} from '../utils/paths';
 import {useI18n} from "@tager/admin-services";
+
+import {getFilesListUrl} from '../utils/paths';
 
 export default defineComponent({
   name: 'App',
