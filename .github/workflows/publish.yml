@@ -23,7 +23,6 @@ jobs:
           # зависимость @vue/cli-shared-utils). На Node 19+ yarn падает
           # с "Found incompatible module" ещё до установки.
           node-version: '18'
-          registry-url: 'https://registry.npmjs.org'
           cache: 'yarn'
 
       - name: Read package info
@@ -54,8 +53,14 @@ jobs:
         run: yarn emit-declarations
 
       - name: Publish to npm
+        # registry-url у setup-node намеренно не задан: он пишет .npmrc
+        # с плейсхолдером ${NODE_AUTH_TOKEN}, а setup-node@v7 больше не
+        # экспортирует заглушку — из-за этого падает yarn. Пишем .npmrc
+        # здесь, чтобы токен не был виден шагам сборки.
         if: steps.check.outputs.exists == 'false'
-        run: npm publish --access public
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" >> "$HOME/.npmrc"
+          npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
