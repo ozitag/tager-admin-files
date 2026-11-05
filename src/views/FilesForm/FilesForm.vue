@@ -26,7 +26,7 @@ import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import {
-  TagerFormSubmitEvent,
+  type TagerFormSubmitEvent,
   FormFooter,
   FormField,
   FormFieldFileInput,
@@ -42,7 +42,7 @@ import { Page } from '@tager/admin-layout';
 
 import { addFile } from '../../services/requests';
 import { getFilesListUrl } from '../../utils/paths';
-import { FormValues } from '../../typings/model';
+import { type FormValues } from '../../typings/model';
 
 import { convertFilesFormValuesToCreationPayload } from './FilesForm.helpers';
 

@@ -41,7 +41,7 @@ import { defineComponent, onMounted } from 'vue';
 import filesize from 'filesize';
 
 import {
-  ColumnDefinition,
+  type ColumnDefinition,
   useDataTable,
   DataTable,
   BaseButton,
@@ -52,7 +52,7 @@ import { useI18n, useResourceDelete } from '@tager/admin-services';
 import { Page } from '@tager/admin-layout';
 
 import { deleteFile, getFilesList } from '../../services/requests';
-import { FileModel } from '../../typings/model';
+import { type FileModel } from '../../typings/model';
 import { getFilesFormUrl } from '../../utils/paths';
 
 export default defineComponent({

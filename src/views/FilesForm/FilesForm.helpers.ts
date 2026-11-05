@@ -1,4 +1,4 @@
-import { FilesCreatePayload, FormValues } from '../../typings/model';
+import { type FilesCreatePayload, type FormValues } from '../../typings/model';
 
 export function convertFilesFormValuesToCreationPayload(
   values: FormValues

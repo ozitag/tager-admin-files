@@ -1,4 +1,4 @@
-import { SingleFileInputValueType } from '@tager/admin-ui';
+import { type SingleFileInputValueType } from '@tager/admin-ui';
 
 export interface FileModel {
   id: number;

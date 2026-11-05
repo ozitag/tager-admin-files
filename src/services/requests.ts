@@ -1,6 +1,6 @@
-import { request, ResponseBody } from '@tager/admin-services';
+import { request, type ResponseBody } from '@tager/admin-services';
 
-import { FileModel } from '../typings/model';
+import { type FileModel } from '../typings/model';
 
 export function getFilesList(params?: {
   query?: string;
