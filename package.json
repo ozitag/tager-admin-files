@@ -11,7 +11,6 @@
     "src"
   ],
   "exports": {
-    "./css": "./dist/style.css",
     ".": "./dist/index.mjs"
   },
   "scripts": {
