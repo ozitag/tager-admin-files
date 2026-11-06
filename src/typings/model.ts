@@ -1,6 +1,6 @@
 import { type SingleFileInputValueType } from '@tager/admin-ui';
 
-export interface FileModel {
+export type FileModel = {
   id: number;
   name: string;
   type: string;
